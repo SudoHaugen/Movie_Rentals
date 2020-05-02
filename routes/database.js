@@ -8,6 +8,8 @@ mongoose.connect(('mongodb://localhost/Vidly'), { useNewUrlParser: true, useUnif
     .then(() => console.log('Connected to MongoDB...'))
     .catch(err => console.log('Could not connect to MongoDB...', err));
 
+    var methods = {};
+
 const genreschema = new mongoose.Schema({
     id: {
         type: Number,
@@ -23,12 +25,12 @@ const genreschema = new mongoose.Schema({
 
 const Genre = mongoose.model('Genre', genreschema);
 
-async function createCourse(genrename) {
+methods.createCourse = async function (genrename) {
     const genre = new Genre({
-        id: genreid,
+        id: staticId,
         name: genrename
     });
-    genreid++;
+    staticId++;  
 
     //Alternative approach for validation with callbacks
     /* await course.validate((err) => {
@@ -43,9 +45,63 @@ async function createCourse(genrename) {
             console.log(err.errors[field].message);
         return null;
     }
+};
+
+/* async function createCourse(genrename) {
+    const genre = new Genre({
+        id: genreid,
+        name: genrename
+    });
+    genreid++;  
+
+    //Alternative approach for validation with callbacks
+    // await course.validate((err) => {
+            
+    //});
+
+    try {
+        let result = await genre.save();
+        return result;
+    } catch (err) {
+        for (field in err.errors)
+            console.log(err.errors[field].message);
+        return null;
+    }
+} */
+
+methods.getAllCourses = async function() {
+    let display_courses = {};
+    let search_result = await Genre
+    .find();
+
+    return search_result;
 }
 
-async function getGenre(genre_name) {
+methods.getGenreByName = async function(genrename) {
+    let search_result = await Genre
+    .find({ name: genrename });
+    
+    if (!search_result) {
+        return true;
+    } else {
+        return search_result;
+    }
+}
+
+methods.getGenreById = async function(genre_id) {
+    let search_result = await Genre
+        .find({ id: genre_id })
+        .select({ name: 1, _id: 0, id: 1 });
+        //.lean();  
+
+    if (!search_result) {
+        return false;
+    } else {
+        return search_result;
+    }
+};
+
+/* async function getGenre(genre_name) {
     let search_result = await Genre
         .find({ name: /genre_name/i })
 
@@ -54,7 +110,6 @@ async function getGenre(genre_name) {
     } else {
         return true;
     }
-}
+} */
 
-
-module.exports = router;
+module.exports = methods;

@@ -27,14 +27,37 @@ let genres = [
     }
 ];
 
- router.get('/', (req, res) => {
-    res.send(genres);
+ router.get('/', async (req, res) => {
+     let display_courses = [];
+
+     try {
+        let courses = await test.getAllCourses();
+        for (field of courses) {
+            display_courses.push({"name": field.name, "id": field.id});
+        }
+     } catch (err) {
+        for (field in err.errors)
+            console.log(err.errors[field].message);
+            return null;
+     }
+
+     res.send(display_courses);
 });
 
-router.get('/:id', (req, res) => {
-    let courseId = req.params.id;
-    //if (res.status(404).send('Course not found'));
-    res.send(genres[courseId].name);
+router.get('/:id', async (req, res) => {
+
+    try {
+        let genre_search = await test.getGenreById(req.params.id);
+        if (genre_search != null) {
+            res.send(genre_search[0]);
+        } else {
+            res.status(404).send('The genre with the given id was not found');
+        }
+    } catch (err) {
+        for (field in err.errors)
+            console.log(err.errors[field].message);
+            return null;
+    }
 });
 
 router.put('/:id', (req, res) => {
@@ -53,19 +76,28 @@ router.put('/:id', (req, res) => {
     res.send(genresId); 
 });
 
-router.post('/', (req, res) => {
-    let find_Genre = getGenre(req.body.name);
-    if (find_Genre == true) res.status(404).send('Genre already exist');
+router.post('/', async (req, res) => {
+    try {
+        let find_Genre = await test.getGenreByName(req.body.name);
 
-    let { error } = validate(req.body);
-    if (error) {
-        res.status(400).send(error.details[0].message);
+        if (find_Genre == true) {res.status(404).send('Genre already exist');}
+        else {
+            let new_Genre = await test.createCourse(req.body.name);
+            console.log(new_Genre);
+        }
+
+        let { error } = validate(req.body);
+        if (error) {
+            res.status(400).send(error.details[0].message);
+        }
+    
+        res.send(genres);
+
+    } catch (err) {
+        for (field in err.errors)
+            console.log(err.errors[field].message);
+            return null;
     }
-
-    let new_Genre = createCourse(req.body.name);
-    console.log(new_Genre);
-
-    res.send(genres);
 });
 
 router.delete('/', (req, res) => {
