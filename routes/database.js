@@ -101,6 +101,21 @@ methods.getGenreById = async function(genre_id) {
     }
 };
 
+methods.updateGenreById = async function(genre_id, document_name) {
+    let filter = { id: genre_id };
+    let update = { name: document_name };
+    let search_result = await Genre
+        .findOneAndUpdate(filter, update, {
+            new: true
+        });
+
+    if (!search_result) {
+        return false;
+    } else {
+        return await search_result;
+    }
+};
+
 /* async function getGenre(genre_name) {
     let search_result = await Genre
         .find({ name: /genre_name/i })

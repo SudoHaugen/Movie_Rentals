@@ -60,20 +60,20 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.put('/:id', (req, res) => {
-    //Check if genres exist - throw err 404 if it dosent
-    let genresId = genres.find(c => c.id === parseInt(req.params.id));
-    if (!genresId) res.status(404).send('The genre with the given id was not found');
+router.put('/:id', async (req, res) => {
 
-    let { error } = validate(req.body);
-    if (error) {
-        res.status(400).send(error.details[0].message);
-        return;
+    try {
+        let genre_search = await test.updateGenreById(req.params.id, req.body.name);
+        if (genre_search != null) {
+            res.send(genre_search);
+        } else {
+            res.status(404).send("The genre with the given id was not found");
+        } 
+    } catch (err) {
+        for (field in err.errors)
+            console.log(err.errors[field].message);
+            return null;
     }
-
-    //Update genre description
-    genresId.name = req.body.name;
-    res.send(genresId); 
 });
 
 router.post('/', async (req, res) => {
