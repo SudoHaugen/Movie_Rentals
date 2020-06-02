@@ -100,15 +100,23 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.delete('/', (req, res) => {
-    let searchResult = genres.find(c => c.name == req.body.name);
-    if (searchResult !== undefined) {
-        genres.splice(genres.indexOf(searchResult), 1);
-    } else {
-        res.send('Sorry the requested genre does not exist...');
-    }
+router.delete('/', async (req, res) => {
+    try {
+        let searchResult = await test.deleteGenreByName(req.body.name);
+        console.log(searchResult);
 
-    res.send(genres);
+        if (searchResult == false) {
+            res.status(404).send(`${req.body.name} does not exist`);
+        } else {
+            
+            res.send('Genre successfully removed');
+            //res.redirect('/api/genres');
+        }   
+    } catch (err) {
+        for (field in err.errors)
+        console.log(err.errors[field].message);
+        return null;
+    }
 });
 
 function validate(inputGenre) {

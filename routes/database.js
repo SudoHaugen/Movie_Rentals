@@ -75,7 +75,7 @@ methods.getAllCourses = async function() {
     .find();
 
     return search_result;
-}
+};
 
 methods.getGenreByName = async function(genrename) {
     let search_result = await Genre
@@ -86,7 +86,7 @@ methods.getGenreByName = async function(genrename) {
     } else {
         return search_result;
     }
-}
+};
 
 methods.getGenreById = async function(genre_id) {
     let search_result = await Genre
@@ -113,6 +113,17 @@ methods.updateGenreById = async function(genre_id, document_name) {
         return false;
     } else {
         return await search_result;
+    }
+};
+
+methods.deleteGenreByName = async function(document_name) {
+    let search_result = await Genre
+        .findOneAndDelete({ name: document_name });
+    
+    if (!search_result) {
+        return false;
+    } else {
+        return search_result;
     }
 };
 
