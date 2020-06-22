@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
-const Joi = require('joi');
+const {Genre, validate} = require('../models/genre');
 var staticId = 0;
 
 mongoose.connect(('mongodb://localhost/Vidly'), { useNewUrlParser: true, useUnifiedTopology: true })
@@ -10,22 +10,7 @@ mongoose.connect(('mongodb://localhost/Vidly'), { useNewUrlParser: true, useUnif
 
     var methods = {};
 
-const genreschema = new mongoose.Schema({
-    id: {
-        type: Number,
-        required: true
-    },
-    name: {
-        type: String,
-        required: true,
-        minlength: 5,
-        maxlength: 100
-    }
-});
-
-const Genre = mongoose.model('Genre', genreschema);
-
-methods.createCourse = async function (genrename) {
+async function createGenre (genrename) {
     const genre = new Genre({
         id: staticId,
         name: genrename
@@ -69,26 +54,24 @@ methods.createCourse = async function (genrename) {
     }
 } */
 
-methods.getAllCourses = async function() {
-    let display_courses = {};
-    let search_result = await Genre
-    .find();
+async function getAllGenres() {
+    let search_result = await Genre.find();
 
     return search_result;
-};
+}
 
-methods.getGenreByName = async function(genrename) {
+async function getGenreByName(genrename) {
     let search_result = await Genre
     .find({ name: genrename });
     
     if (!search_result) {
-        return true;
+        return false;
     } else {
         return search_result;
     }
-};
+}
 
-methods.getGenreById = async function(genre_id) {
+async function getGenreById(genre_id) {
     let search_result = await Genre
         .find({ id: genre_id })
         .select({ name: 1, _id: 0, id: 1 });
@@ -99,9 +82,9 @@ methods.getGenreById = async function(genre_id) {
     } else {
         return search_result;
     }
-};
+}
 
-methods.updateGenreById = async function(genre_id, document_name) {
+async function updateGenreById(genre_id, document_name) {
     let filter = { id: genre_id };
     let update = { name: document_name };
     let search_result = await Genre
@@ -114,9 +97,9 @@ methods.updateGenreById = async function(genre_id, document_name) {
     } else {
         return await search_result;
     }
-};
+}
 
-methods.deleteGenreByName = async function(document_name) {
+async function deleteGenreByName(document_name) {
     let search_result = await Genre
         .findOneAndDelete({ name: document_name });
     
@@ -125,7 +108,7 @@ methods.deleteGenreByName = async function(document_name) {
     } else {
         return search_result;
     }
-};
+}
 
 /* async function getGenre(genre_name) {
     let search_result = await Genre
@@ -138,4 +121,10 @@ methods.deleteGenreByName = async function(document_name) {
     }
 } */
 
-module.exports = methods;
+exports.createGenre = createGenre;
+exports.getAllGenres = getAllGenres;
+exports.getGenreByName = getGenreByName;
+exports.getGenreById = getGenreById;
+exports.updateGenreById = updateGenreById;
+exports.deleteGenreByName = deleteGenreByName;
+exports.validate = validate;
