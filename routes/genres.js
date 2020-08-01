@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const {getAllGenres, getGenreById, getGenreByName, updateGenreById, deleteGenreByName, createGenre, validate} = require('./database.js');
+const {getAllGenres, getGenreById, getGenreByName, updateGenreById, deleteGenreByName, createGenre, validate, createMovie} = require('./database.js');
+const {Genre} = require('../models/genre');
+
 var staticId = 5;
 
  router.get('/', async (req, res) => {
@@ -96,5 +98,8 @@ router.delete('/', async (req, res) => {
         return null;
     }
 });
+
+
+//createMovie("Atlantis", new Genre({id: 5, name: "Adventure"}), 0, 0);
 
 module.exports = router;

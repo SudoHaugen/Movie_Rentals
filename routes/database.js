@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 const {Genre, validate} = require('../models/genre');
+const {Movie} = require('../models/movies');
 var staticId = 0;
 
 mongoose.connect(('mongodb://localhost/Vidly'), { useNewUrlParser: true, useUnifiedTopology: true })
@@ -121,6 +122,19 @@ async function deleteGenreByName(document_name) {
     }
 } */
 
+async function createMovie(title, Genre, numberInStock, dailryRentalRate) {
+    const movie = new Movie({
+        title,
+        Genre,
+        numberInStock,
+        dailryRentalRate
+    });
+
+    const result = await movie.save();
+    console.log(result);
+}
+
+exports.createMovie = createMovie;
 exports.createGenre = createGenre;
 exports.getAllGenres = getAllGenres;
 exports.getGenreByName = getGenreByName;

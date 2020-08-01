@@ -25,4 +25,5 @@ function validate(inputGenre) {
 }
 
 exports.Genre = Genre;
+exports.genreschema = genreschema;
 exports.validate = validate;
