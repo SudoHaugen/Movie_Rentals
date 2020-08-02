@@ -1,22 +1,22 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
-const {Genre, validate} = require('../models/genre');
-const {Movie} = require('../models/movies');
+const { Genre, validate } = require('../models/genre');
+const { Movie } = require('../models/movies');
 var staticId = 0;
 
 mongoose.connect(('mongodb://localhost/Vidly'), { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB...'))
     .catch(err => console.log('Could not connect to MongoDB...', err));
 
-    var methods = {};
+var methods = {};
 
-async function createGenre (genrename) {
+async function createGenre(genrename) {
     const genre = new Genre({
         id: staticId,
         name: genrename
     });
-    staticId++;  
+    staticId++;
 
     //Alternative approach for validation with callbacks
     /* await course.validate((err) => {
@@ -63,8 +63,8 @@ async function getAllGenres() {
 
 async function getGenreByName(genrename) {
     let search_result = await Genre
-    .find({ name: genrename });
-    
+        .find({ name: genrename });
+
     if (!search_result) {
         return false;
     } else {
@@ -73,10 +73,11 @@ async function getGenreByName(genrename) {
 }
 
 async function getGenreById(genre_id) {
+
     let search_result = await Genre
         .find({ id: genre_id })
         .select({ name: 1, _id: 0, id: 1 });
-        //.lean();  
+    //.lean();  
 
     if (!search_result) {
         return false;
@@ -103,7 +104,7 @@ async function updateGenreById(genre_id, document_name) {
 async function deleteGenreByName(document_name) {
     let search_result = await Genre
         .findOneAndDelete({ name: document_name });
-    
+
     if (!search_result) {
         return false;
     } else {
@@ -122,19 +123,6 @@ async function deleteGenreByName(document_name) {
     }
 } */
 
-async function createMovie(title, Genre, numberInStock, dailryRentalRate) {
-    const movie = new Movie({
-        title,
-        Genre,
-        numberInStock,
-        dailryRentalRate
-    });
-
-    const result = await movie.save();
-    console.log(result);
-}
-
-exports.createMovie = createMovie;
 exports.createGenre = createGenre;
 exports.getAllGenres = getAllGenres;
 exports.getGenreByName = getGenreByName;
