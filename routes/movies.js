@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const { Genre } = require("../models/genre");
 const { Movie, validateMovie } = require("../models/movies");
-const { createMovie, getMovieByTitle } = require("./movieDatabase");
+const { createMovie, getMovieByTitle, updateMovieByName, deleteMovieByName } = require("./movieDatabase");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -25,7 +25,6 @@ router.post("/", async (req, res) => {
   }
 
   try {
-    console.log(req.body);
     await createMovie(req.body);
     res.redirect(200, '/movies');
   } catch (err) {
@@ -50,5 +49,37 @@ router.get('/:title', async (req, res) => {
   }
 });
 
+router.put('/:title', async (req, res) => {
+  console.log(req.params.title, req.body.title);
+  try {
+    let movie_search = await updateMovieByName(req.params.title, req.body.title);
+    if (movie_search != null) {
+      res.send(movie_search);
+    } else {
+      res.status(404).send("The movie with the given title was not found");
+    }
+  } catch (err) {
+    for (field in err.errors)
+      console.log(err.errors[field].message);
+    return null;
+  }
+});
+
+router.delete('/', async (req, res) => {
+  try {
+    let searchResult = await deleteMovieByName(req.body.title);
+
+    if (searchResult == false) {
+      res.status(404).send(`${req.body.title} does not exist`);
+    } else {
+
+      res.send('Movie successfully removed').redirect('/api/genres');
+    }
+  } catch (err) {
+    for (field in err.errors)
+      console.log(err.errors[field].message);
+    return null;
+  }
+});
 
 module.exports = router;

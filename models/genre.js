@@ -3,8 +3,7 @@ const Joi = require("joi");
 
 const genreschema = new mongoose.Schema({
   id: {
-    type: Number,
-    required: true,
+    type: Number
   },
   name: {
     type: String,

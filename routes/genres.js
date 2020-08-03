@@ -99,7 +99,4 @@ router.delete('/', async (req, res) => {
     }
 });
 
-
-//createMovie("Atlantis", new Genre({id: 5, name: "Adventure"}), 0, 0);
-
 module.exports = router;

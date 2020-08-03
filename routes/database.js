@@ -9,8 +9,6 @@ mongoose.connect(('mongodb://localhost/Vidly'), { useNewUrlParser: true, useUnif
     .then(() => console.log('Connected to MongoDB...'))
     .catch(err => console.log('Could not connect to MongoDB...', err));
 
-var methods = {};
-
 async function createGenre(genrename) {
     const genre = new Genre({
         id: staticId,

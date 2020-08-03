@@ -37,9 +37,33 @@ async function getMovieByTitle(title_input) {
     }
 }
 
-//Make functions for finding movies with object id reference
+async function updateMovieByName(movie_name, updated_movie_name) {
+    let filter = { title: movie_name };
+    let update = { title: updated_movie_name };
+    let search_result = await Movie
+        .findOneAndUpdate(filter, update, {
+            new: true
+        });
+    if (!search_result) {
+        return false;
+    } else {
+        return await search_result;
+    }
+}
 
+async function deleteMovieByName(document_name) {
+    let search_result = await Movie
+        .findOneAndDelete({ title: document_name });
+
+    if (!search_result) {
+        return false;
+    } else {
+        return search_result;
+    }
+}
 
 
 exports.createMovie = createMovie;
 exports.getMovieByTitle = getMovieByTitle;
+exports.updateMovieByName = updateMovieByName;
+exports.deleteMovieByName = deleteMovieByName;
