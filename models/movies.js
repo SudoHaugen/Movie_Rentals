@@ -45,3 +45,4 @@ const Movie = mongoose.model("Movie", movieschema);
 
 exports.Movie = Movie;
 exports.validateMovie = validateMovie;
+exports.movieschema = movieschema;

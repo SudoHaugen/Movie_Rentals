@@ -27,7 +27,7 @@ async function createMovie(movieField) {
 
 async function getMovieByTitle(title_input) {
     let search_result = await Movie
-        .find({ title: title_input })
+        .findOne({ title: title_input })
         .select('-_id title genre.name numbersInStock dailyRentalRate');
 
     if (!search_result) {

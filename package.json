@@ -13,11 +13,13 @@
     "config": "^3.3.1",
     "debug": "^4.1.1",
     "express": "^4.17.1",
+    "google-spreadsheet": "^3.0.11",
     "helmet": "^3.22.0",
     "joi": "^14.3.1",
     "jshint": "^2.11.0",
     "mongoose": "^5.9.10",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "promisify": "0.0.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

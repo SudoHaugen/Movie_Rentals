@@ -23,6 +23,8 @@ router.post("/", async (req, res) => {
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
+  const genre = await Genre.findById(req.body.genreId);
+  if (!genre) return res.status(400).send('Invalid Genre id');
 
   try {
     await createMovie(req.body);
