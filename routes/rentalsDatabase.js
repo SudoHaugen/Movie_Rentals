@@ -20,10 +20,23 @@ async function createRentals(movie, start_date, end_date) {
 }
 
 async function getAllRentals() {
-    let search_result = await Rental.find();
+    let search_result = await Rental.find().sort('-dateout');
 
     return search_result;
 }
 
+async function deleteRentalByName(document_name) {
+    let search_result = await Rental
+        .findOneAndDelete({ 'movie.title': document_name });
+
+    console.log("Came here");
+    if (!search_result) {
+        return false;
+    } else {
+        return search_result;
+    }
+}
+
 exports.createRentals = createRentals;
 exports.getAllRentals = getAllRentals;
+exports.deleteRentalByName = deleteRentalByName;

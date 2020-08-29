@@ -3,20 +3,68 @@ const { movieschema } = require("./movies");
 
 
 const rentalScheme = new mongoose.Schema({
+    customer: {
+        type: new mongoose.Schema({
+            name: {
+                type: String,
+                required: true,
+                minlength: 5,
+                maxlength: 50
+            },
+            isGold: {
+                type: Boolean,
+                default: false
+            },
+            phone: {
+                type: String,
+                required: true,
+                minlength: 5,
+                maxlength: 50
+            }
+        }),
+        required: true
+    },
     movie: {
-        type: movieschema,
-        required: true
+        type: new mongoose.Schema({
+            title: {
+                type: String,
+                required: true,
+                trim: true,
+                minlength: 5,
+                maxlength: 255
+            },
+            dailyrentalRate: {
+                type: Number,
+                required: true,
+                min: 0,
+                max: 255
+            }
+        }),
     },
-    rental_start: {
+    dateout: {
         type: Date,
-        required: true
+        required: true,
+        defualt: Date.now
     },
-    rental_end: {
-        type: Date,
-        required: true
+    dateReturned: {
+        type: Date
+    },
+    rentalFee: {
+        type: Number,
+        min: 0
     }
 });
+
+function validateRental(rental) {
+    const schema = {
+        customerID: Joi.string().required(),
+        movieID: Joi.string().required()
+    };
+
+    return Joi.validate(retal, schema);
+}
 
 const Rental = mongoose.model("Rental", rentalScheme);
 
 exports.Rental = Rental;
+exports.validateRental = validateRental;

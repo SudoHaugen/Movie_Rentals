@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const { getMovieByTitle } = require("./movieDatabase");
-const { createRentals, getAllRentals } = require('./rentalsDatabase')
+const { createRentals, getAllRentals, deleteRentalByName } = require('./rentalsDatabase')
 const router = express.Router();
 
 
@@ -26,20 +26,33 @@ router.get('/', async (req, res) => {
     let display_rentals = [];
 
     try {
-        console.log("got here");
         let rentals = await getAllRentals();
-        console.log("got here");
 
-        for (field of rentals) {
+        /*for (field of rentals) {
             display_rentals.push({ "Movie": field.movie.title, "Rental start date": field.rental_start, "Rental end date": field.rental_end });
-        }
+        }*/
     } catch (err) {
         for (field in err.errors)
             console.log(err.errors[field].message);
         return null;
     }
 
-    res.send(display_rentals);
+    res.send(rentals);
+});
+
+router.delete('/', async (req, res) => {
+    try {
+        let searchResult = await deleteRentalByName(req.body.movie);
+
+        if (searchResult === false) {
+            res.status(404).send(`${req.body.movie} does not exist`);
+        } else {
+            res.send('Rental successfully removed');
+        }
+    } catch (err) {
+        for (field in err.errors) console.log(err.erros[field].message);
+        return null;
+    }
 });
 
 module.exports = router;
