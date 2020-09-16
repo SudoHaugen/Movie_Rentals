@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const Joi = require("Joi");
 const { Genre, genreschema } = require("./genre");
+const Joi = require("joi");
 
 const movieschema = new mongoose.Schema({
   title: {
@@ -11,8 +11,9 @@ const movieschema = new mongoose.Schema({
     maxlength: 255,
   },
   genre: {
-    type: genreschema, //Hvorfor referer vi til schema istedenfor model?
-    required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'genres',
+      required: true,
   },
   numbersInStock: {
     required: true,
@@ -33,7 +34,7 @@ const movieschema = new mongoose.Schema({
 function validateMovie(movie) {
   const schema = {
     title: Joi.string().min(5).max(50).required(),
-    genreId: Joi.string().required(),
+    genre: Joi.string().min(5).max(50).required(),
     numbersInStock: Joi.number().min(0).max(255).required(),
     dailyRentalRate: Joi.number().min(0).max(255).required(),
   };

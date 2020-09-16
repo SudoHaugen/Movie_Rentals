@@ -1,36 +1,68 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const { getMovieByTitle } = require("./movieDatabase");
-const { createRentals, getAllRentals, deleteRentalByName } = require('./rentalsDatabase')
+const { getMovieById } = require("./movieDatabase");
+const { createRentals, getAllRentals, deleteRentalByName } = require('./rentalsDatabase');
+const { Customer } = require('../models/customer');   
+const { Rental } = require('../models/rentals');
+const { validate } = require("joi");
+const Fawn = require('fawn');
 const router = express.Router();
 
 
+Fawn.init(mongoose);
+
+
 router.post('/', async (req, res) => {
-    let movie = await getMovieByTitle(req.body.movie);
+    const {error} = validate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    const customer = await Customer.findById(req.body.customerID);
+    if (!customer) return res.status(400).send('Invalid customer id');
+
+    const movie = await getMovieById(req.body.movieID);
     if (!movie) return res.status(400).send("Error: Requested movie not found.");
-    let start_date = new Date();
-    let end_date = new Date();
-    end_date.setDate(start_date.getDate() + 14);
 
-    let rental = await createRentals(movie, start_date, end_date);
+    console.log(movie);
 
-    if (rental == false) {
-        res.status(400).send("Something went wrong...");
-    } else {
-        res.status(200).send("Successfully added movie rentals");
+    if (movie.numbersInStock === 0) return res.status(400).send('Movie is not available at this moment');
+
+    let rental = new Rental ({
+        customer: {
+            _id: customer._id,
+            name: customer.name,
+            phone: customer.phone
+        },
+        movie: {
+            _id: movie._id,
+            title: movie.title,
+            dailyRentalRate: movie.dailyRentalRate
+        }
+    });
+
+    console.log(movie._id);
+
+    try {
+        new Fawn.Task()
+        .save('rentals', rental)
+        .update('movies', { _id: movie._id }, {
+            $inc: { numbersInStock: -1 }
+        })
+        .run();
+
+        res.send(rental);
+    } catch(ex) {
+        res.status(500).send('Something failed');
     }
-
 });
 
 router.get('/', async (req, res) => {
+    let rentals = await getAllRentals();
     let display_rentals = [];
 
     try {
-        let rentals = await getAllRentals();
-
-        /*for (field of rentals) {
+        for (field of rentals) {
             display_rentals.push({ "Movie": field.movie.title, "Rental start date": field.rental_start, "Rental end date": field.rental_end });
-        }*/
+        }
     } catch (err) {
         for (field in err.errors)
             console.log(err.errors[field].message);

@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const { Genre } = require("../models/genre");
 const { Movie, validateMovie } = require("../models/movies");
-const { createMovie, getMovieByTitle, updateMovieByName, deleteMovieByName } = require("./movieDatabase");
+const { createMovie, getMovieByTitle, getMovieByName, updateMovieByName, deleteMovieByName } = require("./movieDatabase");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -23,8 +23,8 @@ router.post("/", async (req, res) => {
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
-  const genre = await Genre.findById(req.body.genreId);
-  if (!genre) return res.status(400).send('Invalid Genre id');
+  const genre = await Genre.findById(req.body.genre);
+  if (!genre) return res.status(400).send('Invalid Genre');
 
   try {
     await createMovie(req.body);

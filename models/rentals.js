@@ -40,13 +40,14 @@ const rentalScheme = new mongoose.Schema({
                 max: 255
             }
         }),
+        required: true,
     },
-    dateout: {
+    rental_start: {
         type: Date,
         required: true,
         defualt: Date.now
     },
-    dateReturned: {
+    rental_end: {
         type: Date
     },
     rentalFee: {

@@ -25,6 +25,7 @@ app.use("/", require("./routes/home"));
 app.use("/api/genres", require("./routes/genres"));
 app.use("/api/movies", require("./routes/movies"));
 app.use("/api/rentals", require("./routes/rentals"));
+app.use('/api/customers', require("./routes/customers"));
 app.use(express.static("public"));
 
 app.listen(port);

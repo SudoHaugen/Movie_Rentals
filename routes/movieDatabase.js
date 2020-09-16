@@ -5,18 +5,9 @@ const { Movie } = require('../models/movies');
 const router = express.Router();
 
 async function createMovie(movieField) {
-    let genre = await Genre.findById(movieField.genreId);
-
-    if (!genre) {
-        return res.status(400).send("Invalid genre.");
-    }
-
     let movie = new Movie({
         title: movieField.title,
-        genre: {
-            _id: genre._id,
-            name: genre.name,
-        },
+        genre: movieField.genre,
         numbersInStock: movieField.numbersInStock,
         dailyRentalRate: movieField.dailyRentalRate,
     });
@@ -29,6 +20,18 @@ async function getMovieByTitle(title_input) {
     let search_result = await Movie
         .findOne({ title: title_input })
         .select('-_id title genre.name numbersInStock dailyRentalRate');
+
+    if (!search_result) {
+        return false;
+    } else {
+        return search_result;
+    }
+}
+
+async function getMovieById(movie) {
+    let search_result = await Movie
+        .findOne(movie.movieID)
+        .select('_id title genre.name numbersInStock dailyRentalRate');
 
     if (!search_result) {
         return false;
@@ -67,3 +70,4 @@ exports.createMovie = createMovie;
 exports.getMovieByTitle = getMovieByTitle;
 exports.updateMovieByName = updateMovieByName;
 exports.deleteMovieByName = deleteMovieByName;
+exports.getMovieById = getMovieById;
