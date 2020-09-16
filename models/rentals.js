@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { movieschema } = require("./movies");
 
 
-const rentalScheme = new mongoose.Schema({
+const Rental = mongoose.model("Rental", new mongoose.Schema({
     customer: {
         type: new mongoose.Schema({
             name: {
@@ -45,7 +45,7 @@ const rentalScheme = new mongoose.Schema({
     rental_start: {
         type: Date,
         required: true,
-        defualt: Date.now
+        default: Date.now
     },
     rental_end: {
         type: Date
@@ -54,7 +54,7 @@ const rentalScheme = new mongoose.Schema({
         type: Number,
         min: 0
     }
-});
+}));
 
 function validateRental(rental) {
     const schema = {
@@ -64,8 +64,6 @@ function validateRental(rental) {
 
     return Joi.validate(retal, schema);
 }
-
-const Rental = mongoose.model("Rental", rentalScheme);
 
 exports.Rental = Rental;
 exports.validateRental = validateRental;

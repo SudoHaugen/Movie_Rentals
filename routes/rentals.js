@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const { getMovieById } = require("./movieDatabase");
 const { createRentals, getAllRentals, deleteRentalByName } = require('./rentalsDatabase');
 const { Customer } = require('../models/customer');   
-const { Rental } = require('../models/rentals');
+const {Rental} = require('../models/rentals');
 const { validate } = require("joi");
 const Fawn = require('fawn');
 const router = express.Router();
@@ -22,8 +22,6 @@ router.post('/', async (req, res) => {
     const movie = await getMovieById(req.body.movieID);
     if (!movie) return res.status(400).send("Error: Requested movie not found.");
 
-    console.log(movie);
-
     if (movie.numbersInStock === 0) return res.status(400).send('Movie is not available at this moment');
 
     let rental = new Rental ({
@@ -39,7 +37,7 @@ router.post('/', async (req, res) => {
         }
     });
 
-    console.log(movie._id);
+    console.log(Rental.rental_start);
 
     try {
         new Fawn.Task()
