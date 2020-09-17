@@ -1,7 +1,8 @@
+const Joi = require("joi");
+Joi.objectId = require("joi-objectid")(Joi);
 const express = require("express");
 const app = new express();
 const port = process.env.PORT || 8080;
-const config = require("config");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const bodyParser = require("body-parser");

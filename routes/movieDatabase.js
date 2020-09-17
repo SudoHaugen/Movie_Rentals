@@ -5,14 +5,14 @@ const { Movie } = require('../models/movies');
 const router = express.Router();
 
 async function createMovie(movieField) {
-    let movie = new Movie({
+    const movie = new Movie({
         title: movieField.title,
         genre: movieField.genre,
         numbersInStock: movieField.numbersInStock,
         dailyRentalRate: movieField.dailyRentalRate,
     });
 
-    movie = await movie.save();
+    await movie.save();
     return movie;
 }
 

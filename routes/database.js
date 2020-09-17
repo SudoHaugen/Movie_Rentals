@@ -22,8 +22,8 @@ async function createGenre(genrename) {
     }); */
 
     try {
-        let result = await genre.save();
-        return result;
+        await genre.save();
+        return genre;
     } catch (err) {
         for (field in err.errors)
             console.log(err.errors[field].message);
