@@ -36,8 +36,6 @@ router.post('/', async (req, res) => {
         }
     });
 
-    console.log(Rental.rental_start);
-
     try {
         new Fawn.Task()
             .save('rentals', rental)

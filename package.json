@@ -22,7 +22,8 @@
     "mongoose": "^5.9.10",
     "morgan": "^1.10.0",
     "package.json": "^2.0.1",
-    "promisify": "0.0.3"
+    "promisify": "0.0.3",
+    "validator": "^13.1.17"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

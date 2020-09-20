@@ -5,10 +5,6 @@ const { Genre, validate } = require('../models/genre');
 const { Movie } = require('../models/movies');
 var staticId = 0;
 
-mongoose.connect(('mongodb://localhost/Vidly'), { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('Connected to MongoDB...'))
-    .catch(err => console.log('Could not connect to MongoDB...', err));
-
 async function createGenre(genrename) {
     const genre = new Genre({
         id: staticId,

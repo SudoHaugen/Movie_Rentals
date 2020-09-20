@@ -10,11 +10,16 @@ const jsonParser = bodyParser.json();
 const urlencodedParser = bodyParser.urlencoded({ extended: true });
 const startupDebugger = require("debug")("app:startup");
 const dbDebugger = require("debug")("app:db");
+const mongoose = require("mongoose");
 
 if (app.get("env") === "development") {
   app.use(morgan("tiny"));
   startupDebugger("Morgan enabled for active logging...");
 }
+
+mongoose.connect(('mongodb://localhost/Vidly'), { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Connected to MongoDB...'))
+  .catch(err => console.log('Could not connect to MongoDB...', err));
 
 // Db work
 dbDebugger("Connected to the database...");
@@ -27,6 +32,7 @@ app.use("/api/genres", require("./routes/genres"));
 app.use("/api/movies", require("./routes/movies"));
 app.use("/api/rentals", require("./routes/rentals"));
 app.use('/api/customers', require("./routes/customers"));
+app.use("/api/register_user", require("./routes/register_user"));
 app.use(express.static("public"));
 
 app.listen(port);
