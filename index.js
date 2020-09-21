@@ -33,6 +33,7 @@ app.use("/api/movies", require("./routes/movies"));
 app.use("/api/rentals", require("./routes/rentals"));
 app.use('/api/customers', require("./routes/customers"));
 app.use("/api/register_user", require("./routes/register_user"));
+app.use("/api/auth", require("./routes/auth"));
 app.use(express.static("public"));
 
 app.listen(port);

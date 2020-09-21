@@ -9,6 +9,7 @@
   "author": "Marius Haugen",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "config": "^3.3.1",
     "debug": "^4.1.1",
@@ -19,6 +20,7 @@
     "joi": "^14.3.1",
     "joi-objectid": "^3.0.1",
     "jshint": "^2.11.0",
+    "lodash": "^4.17.20",
     "mongoose": "^5.9.10",
     "morgan": "^1.10.0",
     "package.json": "^2.0.1",
