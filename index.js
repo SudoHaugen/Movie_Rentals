@@ -1,3 +1,4 @@
+const config = require('config');
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 const express = require("express");
@@ -11,6 +12,8 @@ const urlencodedParser = bodyParser.urlencoded({ extended: true });
 const startupDebugger = require("debug")("app:startup");
 const dbDebugger = require("debug")("app:db");
 const mongoose = require("mongoose");
+
+if (!config.get('jwtPrivateKey')) { console.log('FATAL ERROR: jwt is not defined'); process.exit(1); }
 
 if (app.get("env") === "development") {
   app.use(morgan("tiny"));
@@ -32,7 +35,7 @@ app.use("/api/genres", require("./routes/genres"));
 app.use("/api/movies", require("./routes/movies"));
 app.use("/api/rentals", require("./routes/rentals"));
 app.use('/api/customers', require("./routes/customers"));
-app.use("/api/register_user", require("./routes/register_user"));
+app.use("/api/user", require("./routes/user"));
 app.use("/api/auth", require("./routes/auth"));
 app.use(express.static("public"));
 

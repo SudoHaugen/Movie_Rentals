@@ -1,16 +1,12 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
-const { Genre, validate } = require('../models/genre');
-const { Movie } = require('../models/movies');
-var staticId = 0;
+const { Genre, validateGenre } = require('../models/genre');
 
 async function createGenre(genrename) {
     const genre = new Genre({
-        id: staticId,
         name: genrename
     });
-    staticId++;
 
     //Alternative approach for validation with callbacks
     /* await course.validate((err) => {
@@ -123,4 +119,4 @@ exports.getGenreByName = getGenreByName;
 exports.getGenreById = getGenreById;
 exports.updateGenreById = updateGenreById;
 exports.deleteGenreByName = deleteGenreByName;
-exports.validate = validate;
+exports.validateGenre = validateGenre;

@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth');
 const express = require("express");
 const mongoose = require("mongoose");
 const { Genre } = require("../models/genre");
@@ -18,7 +19,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   let { error } = validateMovie(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
@@ -51,7 +52,7 @@ router.get('/:title', async (req, res) => {
   }
 });
 
-router.put('/:title', async (req, res) => {
+router.put('/:title', auth, async (req, res) => {
   console.log(req.params.title, req.body.title);
   try {
     let movie_search = await updateMovieByName(req.params.title, req.body.title);
@@ -67,7 +68,7 @@ router.put('/:title', async (req, res) => {
   }
 });
 
-router.delete('/', async (req, res) => {
+router.delete('/', auth, async (req, res) => {
   try {
     let searchResult = await deleteMovieByName(req.body.title);
 

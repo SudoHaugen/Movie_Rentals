@@ -1,9 +1,8 @@
+const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 const express = require('express');
 const router = express.Router();
-const { getAllGenres, getGenreById, getGenreByName, updateGenreById, deleteGenreByName, createGenre, validate, createMovie } = require('./database.js');
-const { Genre } = require('../models/genre');
-
-var staticId = 5;
+const { getAllGenres, getGenreById, getGenreByName, updateGenreById, deleteGenreByName, createGenre, validateGenre } = require('./database.js');
 
 router.get('/', async (req, res) => {
     let display_courses = [];
@@ -39,7 +38,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
 
     try {
         let genre_search = await updateGenreById(req.params.id, req.body.name);
@@ -55,10 +54,10 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     try {
 
-        let { error } = validate(req.body);
+        let { error } = validateGenre(req.body);
 
         if (error) {
             res.status(400).send(error.details[0].message);
@@ -81,7 +80,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.delete('/', async (req, res) => {
+router.delete('/', [auth, admin], async (req, res) => {
     try {
         let searchResult = await deleteGenreByName(req.body.name);
 

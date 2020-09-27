@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth');
 const express = require("express");
 const mongoose = require("mongoose");
 const { getMovieById } = require("./movieDatabase");
@@ -11,7 +12,7 @@ const router = express.Router();
 Fawn.init(mongoose);
 
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     const { error } = validateRental(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -67,7 +68,7 @@ router.get('/', async (req, res) => {
     res.send(rentals);
 });
 
-router.delete('/', async (req, res) => {
+router.delete('/', auth, async (req, res) => {
     try {
         let searchResult = await deleteRentalByName(req.body.movie);
 

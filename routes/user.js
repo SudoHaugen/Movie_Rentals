@@ -1,8 +1,14 @@
+const auth = require('../middleware/auth');
 const express = require("express");
 const { User, validateUser } = require("../models/user");
 const router = express.Router();
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
+
+router.get('/', auth, async (req, res) => {
+    const user = await User.findById(req.user._id).select('-password');
+    res.send(user);
+});
 
 router.post('/', async (req, res) => {
     const { error } = validateUser(req.body);
@@ -17,9 +23,13 @@ router.post('/', async (req, res) => {
         new_user.password = await bcrypt.hash(req.body.password, salt);
 
         await new_user.save();
-        res.status(200).send(_.pick(new_user, ['_id', 'name', 'email']));
+
+        const token = new_user.generateAuthToken();
+
+        res.status(200).header('-x-auth-token', token).send(_.pick(new_user, ['_id', 'name', 'email']));
     } catch (err) {
-        for (field in err.errors) console.log(err.errors[field].message);
+        console.log(err);
+        // for (field in err.errors) { console.log(err.errors[field].message); } Need a better way to handle errors
         res.sendStatus(400);
     }
 });
