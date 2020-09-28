@@ -13,7 +13,9 @@ const startupDebugger = require("debug")("app:startup");
 const dbDebugger = require("debug")("app:db");
 const mongoose = require("mongoose");
 
-if (!config.get('jwtPrivateKey')) { console.log('FATAL ERROR: jwt is not defined'); process.exit(1); }
+app.set('port', process.env.PORT || 8080);
+
+//if (!config.get('jwtPrivateKey')) { console.log('FATAL ERROR: jwt is not defined'); process.exit(1); }
 
 if (app.get("env") === "development") {
   app.use(morgan("tiny"));
