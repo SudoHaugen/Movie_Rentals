@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config();
 const config = require('config');
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
@@ -15,7 +16,7 @@ const mongoose = require("mongoose");
 
 app.set('port', process.env.PORT || 8080);
 
-//if (!config.get('jwtPrivateKey')) { console.log('FATAL ERROR: jwt is not defined'); process.exit(1); }
+if (!config.get('jwtPrivateKey')) { console.log('FATAL ERROR: jwt is not defined'); process.exit(1); }
 
 if (app.get("env") === "development") {
   app.use(morgan("tiny"));
