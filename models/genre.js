@@ -2,9 +2,6 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 
 const genreschema = new mongoose.Schema({
-  id: {
-    type: Number
-  },
   name: {
     type: String,
     required: true,

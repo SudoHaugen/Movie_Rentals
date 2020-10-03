@@ -1,11 +1,14 @@
-const dotenv = require('dotenv').config();
+require('dotenv').config();
+require('express-async-errors');
 const config = require('config');
+const error = require('./middleware/error');
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 const express = require("express");
 const app = new express();
 const port = process.env.PORT || 8080;
 const morgan = require("morgan");
+const winston = require("winston");
 const helmet = require("helmet");
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
@@ -13,6 +16,8 @@ const urlencodedParser = bodyParser.urlencoded({ extended: true });
 const startupDebugger = require("debug")("app:startup");
 const dbDebugger = require("debug")("app:db");
 const mongoose = require("mongoose");
+
+winston.add(new winston.transports.File({ filename: 'logfile.log' }));
 
 app.set('port', process.env.PORT || 8080);
 
@@ -33,6 +38,7 @@ dbDebugger("Connected to the database...");
 app.use(helmet());
 app.use(jsonParser);
 app.use(urlencodedParser);
+
 app.use("/", require("./routes/home"));
 app.use("/api/genres", require("./routes/genres"));
 app.use("/api/movies", require("./routes/movies"));
@@ -40,6 +46,7 @@ app.use("/api/rentals", require("./routes/rentals"));
 app.use('/api/customers', require("./routes/customers"));
 app.use("/api/user", require("./routes/user"));
 app.use("/api/auth", require("./routes/auth"));
+app.use(error);
 app.use(express.static("public"));
 
 app.listen(port);

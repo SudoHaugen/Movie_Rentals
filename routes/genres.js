@@ -5,36 +5,23 @@ const router = express.Router();
 const { getAllGenres, getGenreById, getGenreByName, updateGenreById, deleteGenreByName, createGenre, validateGenre } = require('./database.js');
 
 router.get('/', async (req, res) => {
+    throw new Error('Some error');
     let display_courses = [];
+    let courses = await getAllGenres();
 
-    try {
-        let courses = await getAllGenres();
-
-        for (field of courses) {
-            display_courses.push({ "name": field.name, "id": field.id });
-        }
-    } catch (err) {
-        for (field in err.errors)
-            console.log(err.errors[field].message);
-        return null;
+    for (field of courses) {
+        display_courses.push({ "name": field.name });
     }
-
     res.send(display_courses);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:name', async (req, res) => {
 
-    try {
-        let genre_search = await getGenreById(req.params.id);
-        if (genre_search != null) {
-            res.send(genre_search[0]);
-        } else {
-            res.status(404).send('The genre with the given id was not found');
-        }
-    } catch (err) {
-        for (field in err.errors)
-            console.log(err.errors[field].message);
-        return null;
+    let genre_search = await getGenreById(req.params.name);
+    if (genre_search != null) {
+        res.send(genre_search[0]);
+    } else {
+        res.status(404).send('The genre with the given id was not found');
     }
 });
 
