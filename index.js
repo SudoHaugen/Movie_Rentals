@@ -8,7 +8,6 @@ const express = require("express");
 const app = new express();
 const port = process.env.PORT || 8080;
 const morgan = require("morgan");
-const winston = require("winston");
 const helmet = require("helmet");
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
@@ -17,14 +16,12 @@ const startupDebugger = require("debug")("app:startup");
 const dbDebugger = require("debug")("app:db");
 const mongoose = require("mongoose");
 
-winston.add(new winston.transports.File({ filename: 'logfile.log' }));
-
 app.set('port', process.env.PORT || 8080);
 
 if (!config.get('jwtPrivateKey')) { console.log('FATAL ERROR: jwt is not defined'); process.exit(1); }
 
 if (app.get("env") === "development") {
-  app.use(morgan("tiny"));
+  app.use(morgan({ format: 'dev', immediate: true }));
   startupDebugger("Morgan enabled for active logging...");
 }
 

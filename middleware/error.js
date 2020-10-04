@@ -1,6 +1,6 @@
-const winston = require("winston");
+const { logger } = require('../config/logger');
 
 module.exports = function (err, req, res, next) {
-    winston.error(err.message, err);
+    logger.info(err.message, { metadata: err.stack });
     res.status(500).send('Something failed.');
 }
