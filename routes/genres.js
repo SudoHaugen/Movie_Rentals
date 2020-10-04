@@ -5,7 +5,6 @@ const router = express.Router();
 const { getAllGenres, getGenreById, getGenreByName, updateGenreById, deleteGenreByName, createGenre, validateGenre } = require('./database.js');
 
 router.get('/', async (req, res) => {
-    throw new Error("A wild error has appeared!", Error.stack);
     let display_courses = [];
     let courses = await getAllGenres();
 
