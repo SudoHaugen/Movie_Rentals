@@ -5,6 +5,8 @@ require('express-async-errors');
 
 //Currently Winston console output does not work as expected. prettyPrint and colorize does not work per documentation. Before this is fixed we have to use the default log output in console for uncaught exception errors
 
+//According to documentation; Winston is supposed to exit node process on error, but does not do so (warning)
+
 
 /* Custom format for log levels and color codes for winston console output
 const logLevels = {

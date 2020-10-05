@@ -12,6 +12,10 @@ require('./startup/http_security_header')(app);
 
 app.set('port', process.env.PORT || 8080);
 
+process.on("uncaughtException", () => {
+    console.log("LEL!");
+});
+
 process.setMaxListeners(20); //Increase max amount of listeners due to possible memory leak
 
 app.listen(port, () => logger.info(`Listening on port ${port}`));
