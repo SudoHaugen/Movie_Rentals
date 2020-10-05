@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
     let display_courses = [];
     let courses = await getAllGenres();
 
-    for (field of courses) {
+    for (let field of courses) {
         display_courses.push({ "name": field.name });
     }
     res.send(display_courses);
@@ -34,7 +34,7 @@ router.put('/:id', auth, async (req, res) => {
             res.status(404).send("The genre with the given id was not found");
         }
     } catch (err) {
-        for (field in err.errors)
+        for (let field in err.errors)
             console.log(err.errors[field].message);
         return null;
     }
@@ -61,7 +61,7 @@ router.post('/', auth, async (req, res) => {
         res.redirect('/api/genres');
 
     } catch (err) {
-        for (field in err.errors)
+        for (let field in err.errors)
             res.send(err.errors[field].message);
     }
 });
@@ -78,7 +78,7 @@ router.delete('/', [auth, admin], async (req, res) => {
             //res.redirect('/api/genres');
         }
     } catch (err) {
-        for (field in err.errors)
+        for (let field in err.errors)
             console.log(err.errors[field].message);
         return null;
     }
