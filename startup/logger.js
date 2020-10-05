@@ -47,7 +47,8 @@ const logger = createLogger({
         new transports.Console(),
         new transports.File({ filename: 'uncaughtExceptions.log', timestamp: true }),
         new transports.MongoDB({ db: 'mongodb://localhost/Vidly', timestamp: true, options: { useUnifiedTopology: true }, collection: 'uncaughtExceptions.log' })
-    ]
+    ],
+    exitOnError: true
 });
 
 module.exports.logger = logger;
