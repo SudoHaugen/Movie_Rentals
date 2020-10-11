@@ -20,8 +20,8 @@ router.post('/', async (req, res) => {
 
         res.send(token);
     } catch (err) {
-        for (field in err.errors) console.log(err.errors[field].message);
-        res.sendStatus(400);
+        //for (field in err.errors) console.log(err.errors[field].message);
+        res.status(400).send("Something went wrong with the request");
     }
 });
 

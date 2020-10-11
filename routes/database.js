@@ -1,17 +1,9 @@
-const mongoose = require('mongoose');
-const express = require('express');
-const router = express.Router();
 const { Genre, validateGenre } = require('../models/genre');
 
 async function createGenre(genrename) {
     const genre = new Genre({
         name: genrename
     });
-
-    //Alternative approach for validation with callbacks
-    /* await course.validate((err) => {
-            
-    }); */
 
     try {
         await genre.save();
@@ -21,7 +13,7 @@ async function createGenre(genrename) {
             console.log(err.errors[field].message);
         return null;
     }
-};
+}
 
 /* async function createCourse(genrename) {
     const genre = new Genre({
@@ -54,23 +46,21 @@ async function getAllGenres() {
 async function getGenreByName(genrename) {
     let search_result = await Genre
         .find({ name: genrename });
-
     if (!search_result) {
-        return false;
+        return null;
     } else {
         return search_result;
     }
 }
 
 async function getGenreById(genre_id) {
-
     let search_result = await Genre
-        .find({ id: genre_id })
-        .select({ name: 1, _id: 0, id: 1 });
-    //.lean();  
+        .findById(genre_id)
+        .select({ name: 1, _id: 1 });
+    //.lean();
 
     if (!search_result) {
-        return false;
+        return null;
     } else {
         return search_result;
     }

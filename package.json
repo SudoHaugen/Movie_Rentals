@@ -4,7 +4,7 @@
   "description": "Video renting service",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon index.js"
+    "test": "jest --watchAll --verbose --coverage --runInBand"
   },
   "author": "Marius Haugen",
   "license": "ISC",
@@ -19,6 +19,7 @@
     "fawn": "^2.1.5",
     "google-spreadsheet": "^3.0.13",
     "helmet": "^3.22.0",
+    "http-shutdown": "^1.2.2",
     "joi": "^14.3.1",
     "joi-objectid": "^3.0.1",
     "jsonwebtoken": "^8.5.1",
@@ -33,7 +34,9 @@
     "winston-mongodb": "^5.0.5"
   },
   "devDependencies": {
+    "jest": "^26.5.2",
     "jshint": "^2.12.0",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "supertest": "^5.0.0"
   }
 }

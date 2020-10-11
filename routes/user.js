@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
     } catch (err) {
         console.log(err);
         // for (field in err.errors) { console.log(err.errors[field].message); } Need a better way to handle errors
-        res.sendStatus(400);
+        res.status(400).send("Could not find user");
     }
 });
 

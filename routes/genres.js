@@ -1,11 +1,11 @@
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
+const validateObjectId = require('../middleware/validateObjectId');
 const express = require('express');
 const router = express.Router();
 const { getAllGenres, getGenreById, getGenreByName, updateGenreById, deleteGenreByName, createGenre, validateGenre } = require('./database.js');
 
 router.get('/', async (req, res) => {
-    throw new Error("LEL!");
     let display_courses = [];
     let courses = await getAllGenres();
 
@@ -15,18 +15,17 @@ router.get('/', async (req, res) => {
     res.send(display_courses);
 });
 
-router.get('/:name', async (req, res) => {
+router.get('/:id', validateObjectId, async (req, res) => {
+    let genre_search = await getGenreById(req.params.id);
 
-    let genre_search = await getGenreById(req.params.name);
     if (genre_search != null) {
-        res.send(genre_search[0]);
+        res.send(genre_search);
     } else {
         res.status(404).send('The genre with the given id was not found');
     }
 });
 
 router.put('/:id', auth, async (req, res) => {
-
     try {
         let genre_search = await updateGenreById(req.params.id, req.body.name);
         if (genre_search != null) {
@@ -52,11 +51,11 @@ router.post('/', auth, async (req, res) => {
 
         let find_Genre = await getGenreByName(req.body.name);
 
-        if (find_Genre != false) { res.status(404).send('Genre already exist'); }
+        if (find_Genre != false) { res.status(400).send('Genre already exist'); }
         else {
             let new_Genre = await createGenre(req.body.name);
             console.log('No genre named ' + new_Genre.name + ' was found. Genrelist updated...');
-            res.redirect('/api/genres');
+            res.status(200).send(new_Genre);
         }
 
         res.redirect('/api/genres');
