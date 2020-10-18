@@ -4,7 +4,11 @@
   "description": "Video renting service",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll --verbose --coverage --runInBand"
+    "test": "jest --watchAll --verbose --coverage --runInBand",
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": "12.16.3"
   },
   "author": "Marius Haugen",
   "license": "ISC",

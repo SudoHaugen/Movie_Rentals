@@ -10,7 +10,7 @@ require('./startup/requestParser')(app);
 require('./startup/config');
 require("./startup/routes")(app);
 require('./startup/validation')();
-require('./startup/http_security_header')(app);
+require('./startup/prod')(app);
 
 app.set('port', process.env.PORT || 8080);
 
